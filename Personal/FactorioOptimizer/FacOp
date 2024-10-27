@@ -1,0 +1,63 @@
+import math
+import tkinter as tk
+#Welcoming the user
+def logisticsMenu():
+    mainWindow.destroy()
+    logiWindow = tk.Tk()
+    logiWindow.title("Factorio Omptimizer: Logistics")
+    logiWindow.geometry("800x800")
+    logiWindow.configure(background="#282828")
+    logiWindow.attributes('-fullscreen', True)
+
+
+
+
+def productionMenu():
+    print("pb")
+
+def intermediateMenu():
+    print("ib")
+
+def militaryMenu():
+    print("mm")
+    
+
+mainWindow = tk.Tk()
+mainWindow.title("Factorio Optimizer")
+mainWindow.geometry("800x800")
+mainWindow.configure(background="#282828")
+mainWindow.attributes('-fullscreen', True)
+
+numRows = 2
+numColumns = 4
+
+for i in range(numRows):
+    mainWindow.rowconfigure(i, weight=1)
+
+for i in range(numColumns):
+    mainWindow.columnconfigure(i, weight=1)
+
+
+
+topLabel = tk.Label(mainWindow, text = "Click a button to see items in the catagory", foreground="white", font=("", 60, "bold"), background="#282828")
+topLabel.grid(row=0,column=0, sticky="nsew", columnspan=4)
+
+closeButton = tk.Button(mainWindow, text="X", font=("", 30, "bold"), command=mainWindow.destroy, foreground="black", background="red", relief="raised", padx=10)
+closeButton.grid(row=0, column=3, sticky="ne")
+
+
+logisticsButton = tk.Button(mainWindow, text = "Logistics", font=("", 30, "bold"), command=logisticsMenu)
+logisticsButton.grid(row=1, column=0, sticky="nsew")
+
+productionButton = tk.Button(mainWindow, text = "Production", font=("", 30, "bold"), command=productionMenu)
+productionButton.grid(row=1, column=1, sticky="nsew")
+
+intermediateButton = tk.Button(mainWindow, text = "Intermediate\nProducts", font=("", 30, "bold"), command=intermediateMenu)
+intermediateButton.grid(row=1, column=2, sticky="nsew")
+
+militaryButton = tk.Button(mainWindow, text = "Military", font=("", 30, "bold"), command=militaryMenu)
+militaryButton.grid(row=1, column=3, sticky="nsew")
+
+mainWindow.mainloop()
+
+    
