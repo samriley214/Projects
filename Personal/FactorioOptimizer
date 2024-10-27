@@ -1,0 +1,57 @@
+import math
+import tkinter as tk
+#Welcoming the user
+def logisticsMenu():
+    print("lb")
+
+def productionMenu():
+    print("pb")
+
+def intermediateMenu():
+    print("ib")
+
+def militaryMenu():
+    print("mm")
+    
+
+window = tk.Tk()
+window.title("Factorio Optimizer")
+window.geometry("800x800")
+window.configure(background="#282828")
+
+numRows = 2
+numColumns = 4
+
+for i in range(numRows):
+    window.rowconfigure(i, weight=1)
+
+for i in range(numColumns):
+    window.columnconfigure(i, weight=1)
+
+
+
+topLabel = tk.Label(window, text = "Optimizing time", foreground="white", font=("", 60, "bold"), background="#282828")
+topLabel.grid(row=0,column=0, sticky="nsew", columnspan=4)
+
+logisticsButton = tk.Button(window, text = "Logistics", font=("", 30, "bold"), command=logisticsMenu)
+logisticsButton.grid(row=1, column=0, sticky="nsew")
+
+productionButton = tk.Button(window, text = "Production", font=("", 30, "bold"), command=productionMenu)
+productionButton.grid(row=1, column=1, sticky="nsew")
+
+intermediateButton = tk.Button(window, text = "Intermediate\nProducts", font=("", 30, "bold"), command=intermediateMenu)
+intermediateButton.grid(row=1, column=2, sticky="nsew")
+
+militaryButton = tk.Button(window, text = "Military", font=("", 30, "bold"), command=militaryMenu)
+militaryButton.grid(row=1, column=3, sticky="nsew")
+
+
+
+
+
+
+
+
+window.mainloop()
+
+    
