@@ -14,45 +14,58 @@ F = "Furnace"
 
 
 class item:
-    def __init__(self, recipe, craftTime, producedIn, amountProduced):
+    def __init__(self, name, recipe, craftTime, producedIn, amountProduced):
         self.recipe = recipe
         self.craftTime = craftTime
         self.producedIn = producedIn
         self.amountProduced = amountProduced
+        self.name = name
     
     def __str__(self):
-        return f"Produces {self.amountProduced * (1 / self.craftTime)}/s in {self.producedIn} using {self.recipe}"
+        str = f"Produces {self.amountProduced * (1 / self.craftTime)}/s in {self.producedIn}"
+        if self.recipe:
+            str += " using "
+            for ingredient, quantity in self.recipe:
+                str += f"{quantity, ingredient.name} "
+        else:
+            return str
 
 
 
-ironOre = item(None, 2, EMD, 1)
-copperOre = item(None, 2, EMD, 1)
+
+itemsNeeded = ""
+
+
+ironOre = item("Iron Ore", None, 2, EMD, 1)
+copperOre = item("Copper Ore", None, 2, EMD, 1)
 
 ironPlateRecipe = [(ironOre, 1)]
-ironPlate = item(ironPlateRecipe, 3.2, F, 1)
+ironPlate = item("Iron Plate", ironPlateRecipe, 3.2, F, 1)
 
 copperPlateRecipe = [(copperOre, 2)]
-copperPlate = (copperPlateRecipe, 3.2, F, 1)
+copperPlate = ("Copper Plate", copperPlateRecipe, 3.2, F, 1)
 
 gearRecipe = [(ironPlate, 2)]
-gear = item(gearRecipe, 0.5, AS3, 1)
+gear = item("Gear", gearRecipe, 0.5, AS3, 1)
 
 yellowBeltRecipe = [(gear, 1), (ironPlate, 1)]
-yellowBelt = item(yellowBeltRecipe, 0.5, AS3, 2)
+yellowBelt = item("Yellow Transporter Belt", yellowBeltRecipe, 0.5, AS3, 2)
+
+itemsDict = {"Yellow Transporter Belt" : yellowBelt, "Gear" : gear, "Iron Ore" : ironOre, "Copper Ore" : copperOre}
 
 
+def calculateItemsNeeded():
+    selectedItemName = selectedVar.get()
+    selectedItem = itemsDict.get(selectedItemName)
+    if selectedItem:
+        itemsNeededLabel.config(text=str(selectedItem))
+    else:
+        itemsNeededLabel.config(text="")
 
-
-def productionMenu():
-    print("pb")
-
-def intermediateMenu():
-    print("ib") 
-
-def militaryMenu():
-    print("mm")
-    
 def mainWindow():
+    global selectedVar, itemsNeededLabel
+
+
     mainWindow = tk.Tk()
     mainWindow.title("Factorio Optimizer")
     mainWindow.geometry("800x800")
@@ -67,77 +80,36 @@ def mainWindow():
 
 
 
-    mainWindowTopLabel = tk.Label(mainWindow, text = "Click a button to see items in the catagory", foreground="white", font=("", 60, "bold"), background="#282828")
+    mainWindowTopLabel = tk.Label(mainWindow, text = "Use the dropdown to select and item and\nthen enter how many you need per second", foreground="white", font=("", 60, "bold"), background="#282828")
     mainWindowTopLabel.grid(row=0,column=0, sticky="nsew", columnspan=4)
 
     mainCloseButton = tk.Button(mainWindow, text="X", font=("", 30, "bold"), command=sys.exit, foreground="black", background="red", relief="raised", padx=10)
     mainCloseButton.grid(row=0, column=3, sticky="ne")
 
+    itemsPerSecondEntry = tk.Entry(mainWindow, width=20)
+    itemsPerSecondEntry.configure(font=("", 15, "bold"))
+    itemsPerSecondEntry.grid(row=1, column=0, sticky="n")
+    
+    
+    selectedVar = tk.StringVar(mainWindow)
+    selectedVar.set("Choose an Option")
+    dropdownOptions = list(itemsDict.keys())
+    dropdown = tk.OptionMenu(mainWindow, selectedVar, *dropdownOptions)
+    dropdown.configure(font=("", 30, "bold"), foreground="white", background="#282828", relief="flat")
+    dropdown.grid(row=1, column=0, sticky = "")
 
-    logisticsButton = tk.Button(mainWindow, text = "Logistics", font=("", 30, "bold"), command=logisticsMenu)
-    logisticsButton.grid(row=1, column=0, sticky="nsew")
+    itemsNeededLabel = tk.Label(mainWindow, text=itemsNeeded, font=("", 30))
+    itemsNeededLabel.grid(row=1, column=2, columnspan=2, sticky="nesw")
 
-    productionButton = tk.Button(mainWindow, text = "Production", font=("", 30, "bold"), command=productionMenu)
-    productionButton.grid(row=1, column=1, sticky="nsew")
+    calculateButton = tk.Button(mainWindow, text="Calculate", font=("",30,"bold"), command=calculateItemsNeeded)
+    calculateButton.grid(row=3, column=0, sticky="nesw")
 
-    intermediateButton = tk.Button(mainWindow, text = "Intermediate\nProducts", font=("", 30, "bold"), command=intermediateMenu)
-    intermediateButton.grid(row=1, column=2, sticky="nsew")
-
-    militaryButton = tk.Button(mainWindow, text = "Military", font=("", 30, "bold"), command=militaryMenu)
-    militaryButton.grid(row=1, column=3, sticky="nsew")
-
+    
     mainWindow.mainloop()
 
 
-def logisticsMenu():
-    logiWindow = tk.Tk()
-    logiWindow.title("Factorio Omptimizer: Logistics")
-    logiWindow.geometry("800x800")
-    logiWindow.configure(background="#282828")
-    logiWindow.attributes('-fullscreen', True)
-    tk.Toplevel(logiWindow)
-    
-    for i in range(4):
-        logiWindow.rowconfigure(i, weight=1)
 
-    for i in range(3):
-        logiWindow.columnconfigure(i, weight=1)
-    
-    logiTopLabel = tk.Label(logiWindow, text="Logistics", font=("", 60, "bold"), foreground="white", background="#282828")
-    logiTopLabel.grid(row=0, column=0, columnspan=3)
 
-    logiBackButton = tk.Button(logiWindow, text="<", font=("", 30, "bold"), command=logiWindow.destroy, foreground="white", background="#63E5FF", padx=10)
-    logiBackButton.grid(row=0, column=0, sticky="nw")
-    
-    logiCloseButton = tk.Button(logiWindow, text="X", font=("", 30, "bold"), command=sys.exit, foreground="black", background="red", padx=10)
-    logiCloseButton.grid(row=0, column=2, sticky="ne")
-
-    containerButton = tk.Button(logiWindow, text = "Containers", font=("", 30, "bold"), command=logiWindow.destroy)
-    containerButton.grid(row=1, column=0, sticky="nesw")
-    
-    beltButton = tk.Button(logiWindow, text = "Belts", font=("", 30, "bold"), command=print(yellowBelt))
-    beltButton.grid(row=1, column=1, sticky="nesw")
-
-    inserterButton = tk.Button(logiWindow, text = "Inserters", font=("", 30, "bold"), command=logiWindow.destroy)
-    inserterButton.grid(row=1, column=2, sticky="nesw")
-
-    ppButton = tk.Button(logiWindow, text = "Pipes/Power", font=("", 30, "bold"), command=logiWindow.destroy)
-    ppButton.grid(row=2, column=0, sticky="nesw")
-
-    railButton = tk.Button(logiWindow, text = "Rails", font=("", 30, "bold"), command=logiWindow.destroy)
-    railButton.grid(row=2, column=1, sticky="nesw")
-
-    vehicleButton = tk.Button(logiWindow, text = "Vehicles", font=("", 30, "bold"), command=logiWindow.destroy)
-    vehicleButton.grid(row=2, column=2, sticky="nesw")
-
-    botButton = tk.Button(logiWindow, text = "Robots", font=("", 30, "bold"), command=logiWindow.destroy)
-    botButton.grid(row=3, column=0, sticky="nesw")
-
-    circuitButton = tk.Button(logiWindow, text = "Circuits", font=("", 30, "bold"), command=logiWindow.destroy)
-    circuitButton.grid(row=3, column=1, sticky="nesw")
-
-    tileButton = tk.Button(logiWindow, text = "Tiles", font=("", 30, "bold"), command=logiWindow.destroy)
-    tileButton.grid(row=3, column=2, sticky="nesw")
 
 
 
