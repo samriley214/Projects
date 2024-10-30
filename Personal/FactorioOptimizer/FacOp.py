@@ -3,13 +3,13 @@ import tkinter as tk
 import sys
 
 
-EMD = "Electric Mining Drill"
-PJ = "Pumpjack"
-AS1 = "Assembler 1"
-AS2 = "Assembler 2"
-AS3 = "Assembler 3"
-HC = "Hand-crafted"
-F = "Furnace"
+EMD = ["Electric Mining Drill", 1]
+PJ = ["Pumpjack", 1]
+AS1 = ["Assembler 1", 0.5]
+AS2 = ["Assembler 2", 0.75]
+AS3 = ["Assembler 3", 1.25]
+HC = ["Hand-crafted", 1]
+F = ["Furnace", 1]
 
 
 
@@ -20,20 +20,17 @@ class item:
         self.producedIn = producedIn
         self.amountProduced = amountProduced
         self.name = name
+        self.itemsPerSecond = (self.amountProduced * (1 / self.craftTime))
     
     def __str__(self):
-        str = f"Produces {self.amountProduced * (1 / self.craftTime)}/s in {self.producedIn}"
+        str = f"Produces {self.amountProduced * (1 / self.craftTime)}/s in {self.producedIn[0]}"
         if self.recipe:
             str += " using "
-            for ingredient, quantity in self.recipe:
-                str += f"{quantity, ingredient.name} "
+            for ingredients, quantity in self.recipe:
+                str += f"{quantity, ingredients.name} "
+            return str
         else:
             return str
-
-
-
-
-itemsNeeded = ""
 
 
 ironOre = item("Iron Ore", None, 2, EMD, 1)
@@ -57,13 +54,16 @@ itemsDict = {"Yellow Transporter Belt" : yellowBelt, "Gear" : gear, "Iron Ore" :
 def calculateItemsNeeded():
     selectedItemName = selectedVar.get()
     selectedItem = itemsDict.get(selectedItemName)
+    wantedPerSecond = itemsPerSecondEntry.get()
+    productionModifier = selectedItem.producedIn[1]
     if selectedItem:
-        itemsNeededLabel.config(text=str(selectedItem))
+        neededCrafters = (float(wantedPerSecond) / (selectedItem.itemsPerSecond * productionModifier))
+        itemsNeededLabel.config(text=f"You need {math.ceil(neededCrafters)} {selectedItem.producedIn}s to make {(selectedItem.itemsPerSecond * neededCrafters) * productionModifier}")
     else:
-        itemsNeededLabel.config(text="")
+        itemsNeededLabel.config(text="Nothing Selected")
 
 def mainWindow():
-    global selectedVar, itemsNeededLabel
+    global selectedVar, itemsNeededLabel, itemsPerSecondEntry
 
 
     mainWindow = tk.Tk()
@@ -98,7 +98,7 @@ def mainWindow():
     dropdown.configure(font=("", 30, "bold"), foreground="white", background="#282828", relief="flat")
     dropdown.grid(row=1, column=0, sticky = "")
 
-    itemsNeededLabel = tk.Label(mainWindow, text=itemsNeeded, font=("", 30))
+    itemsNeededLabel = tk.Label(mainWindow, text="", font=("", 30), wraplength=800)
     itemsNeededLabel.grid(row=1, column=2, columnspan=2, sticky="nesw")
 
     calculateButton = tk.Button(mainWindow, text="Calculate", font=("",30,"bold"), command=calculateItemsNeeded)
