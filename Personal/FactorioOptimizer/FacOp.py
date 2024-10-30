@@ -3,13 +3,15 @@ import tkinter as tk
 import sys
 
 
-EMD = ["Electric Mining Drill", 1]
-PJ = ["Pumpjack", 1]
-AS1 = ["Assembler 1", 0.5]
-AS2 = ["Assembler 2", 0.75]
-AS3 = ["Assembler 3", 1.25]
-HC = ["Hand-crafted", 1]
-F = ["Furnace", 1]
+EMD = "Electric Mining Drill"
+PJ = "Pumpjack"
+AS1 = "Assembler 1"
+AS2 = "Assembler 2"
+AS3 = "Assembler 3"
+HC ="Hand-crafted"
+F = "Furnace"
+
+crafterDict = {"Electric Mining Drill" : 1, "Pumpjack" : 1, "Assembling Machine 1" : 0.5, "Assembling Machine 2" : 0.75, "Assembling Machine 3" : 1.25, "Hand-craft" : 1, "Stone Furnace" : 0.3125, "Steel Furnace" : 0.625 }
 
 
 
@@ -23,7 +25,7 @@ class item:
         self.itemsPerSecond = (self.amountProduced * (1 / self.craftTime))
     
     def __str__(self):
-        str = f"Produces {self.amountProduced * (1 / self.craftTime)}/s in {self.producedIn[0]}"
+        str = f"Produces {self.amountProduced * (1 / self.craftTime)}/s in {self.producedIn}"
         if self.recipe:
             str += " using "
             for ingredients, quantity in self.recipe:
@@ -52,18 +54,25 @@ itemsDict = {"Yellow Transporter Belt" : yellowBelt, "Gear" : gear, "Iron Ore" :
 
 
 def calculateItemsNeeded():
-    selectedItemName = selectedVar.get()
+    global selectedItem, selectedCrafter, itemsNeededLabel, itemsPerSecondEntry
+
+    
+    selectedCrafterName = selectedCrafter.get()
+    productionModifier = crafterDict.get(selectedCrafterName)
+
+    selectedItemName = selectedItem.get()
     selectedItem = itemsDict.get(selectedItemName)
+
     wantedPerSecond = itemsPerSecondEntry.get()
-    productionModifier = selectedItem.producedIn[1]
+
     if selectedItem:
         neededCrafters = (float(wantedPerSecond) / (selectedItem.itemsPerSecond * productionModifier))
-        itemsNeededLabel.config(text=f"You need {math.ceil(neededCrafters)} {selectedItem.producedIn}s to make {(selectedItem.itemsPerSecond * neededCrafters) * productionModifier}")
+        itemsNeededLabel.config(text=f"You need {math.ceil(neededCrafters)} {selectedCrafterName}s to make {(selectedItem.itemsPerSecond * neededCrafters) * productionModifier}/s")
     else:
         itemsNeededLabel.config(text="Nothing Selected")
 
 def mainWindow():
-    global selectedVar, itemsNeededLabel, itemsPerSecondEntry
+    global selectedItem, selectedCrafter, itemsNeededLabel, itemsPerSecondEntry
 
 
     mainWindow = tk.Tk()
@@ -91,12 +100,19 @@ def mainWindow():
     itemsPerSecondEntry.grid(row=1, column=0, sticky="n")
     
     
-    selectedVar = tk.StringVar(mainWindow)
-    selectedVar.set("Choose an Option")
-    dropdownOptions = list(itemsDict.keys())
-    dropdown = tk.OptionMenu(mainWindow, selectedVar, *dropdownOptions)
-    dropdown.configure(font=("", 30, "bold"), foreground="white", background="#282828", relief="flat")
-    dropdown.grid(row=1, column=0, sticky = "")
+    selectedItem = tk.StringVar(mainWindow)
+    selectedItem.set("Item")
+    itemDropdownOptions = list(itemsDict.keys())
+    itemDropdown = tk.OptionMenu(mainWindow, selectedItem, *itemDropdownOptions)
+    itemDropdown.configure(font=("", 30, "bold"), foreground="white", background="#282828", relief="flat", wraplength=300)
+    itemDropdown.grid(row=1, column=0, sticky = "w")
+
+    selectedCrafter = tk.StringVar(mainWindow)
+    selectedCrafter.set("Crafter")
+    crafterDropdownOptions = list(crafterDict.keys())
+    crafterDropdown = tk.OptionMenu(mainWindow, selectedCrafter, *crafterDropdownOptions)
+    crafterDropdown.configure(font=("", 30, "bold"), foreground="white", background="#282828", relief="flat", wraplength=300)
+    crafterDropdown.grid(row=1, column=0, sticky = "e")
 
     itemsNeededLabel = tk.Label(mainWindow, text="", font=("", 30), wraplength=800)
     itemsNeededLabel.grid(row=1, column=2, columnspan=2, sticky="nesw")
