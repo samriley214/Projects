@@ -35,22 +35,28 @@ class item:
             return str
 
 
-ironOre = item("Iron Ore", None, 2, EMD, 1)
-copperOre = item("Copper Ore", None, 2, EMD, 1)
+ironOre = item("Iron Ore", None, 2, "Electric Mining Drills", 1)
+copperOre = item("Copper Ore", None, 2, "Electric Mining Drills", 1)
 
 ironPlateRecipe = [(ironOre, 1)]
-ironPlate = item("Iron Plate", ironPlateRecipe, 3.2, F, 1)
+ironPlate = item("Iron Plate", ironPlateRecipe, 3.2, "Furnaces", 1)
 
 copperPlateRecipe = [(copperOre, 2)]
-copperPlate = ("Copper Plate", copperPlateRecipe, 3.2, F, 1)
+copperPlate = ("Copper Plate", copperPlateRecipe, 3.2, "Furnaces", 1)
 
 gearRecipe = [(ironPlate, 2)]
-gear = item("Gear", gearRecipe, 0.5, AS3, 1)
+gear = item("Gear", gearRecipe, 0.5, "Assembling Machines", 1)
 
 yellowBeltRecipe = [(gear, 1), (ironPlate, 1)]
-yellowBelt = item("Yellow Transporter Belt", yellowBeltRecipe, 0.5, AS3, 2)
+yellowBelt = item("Yellow Transporter Belt", yellowBeltRecipe, 0.5, "Assembling Machines", 2)
 
-itemsDict = {"Yellow Transporter Belt" : yellowBelt, "Gear" : gear, "Iron Ore" : ironOre, "Copper Ore" : copperOre}
+copperWireRecipe = [(copperPlate, 1)]
+copperWire = item("Copper Wire", copperWireRecipe, 0.5, "Assembling Machines", 2)
+
+greenCircuitRecipe = [(copperWire, 3), (ironPlate, 1)]
+greenCircuit = item("Green Circuit", greenCircuitRecipe, 0.5, "Assembling Machines", 1)
+
+itemsDict = {"Yellow Transporter Belt" : yellowBelt, "Gear" : gear, "Iron Ore" : ironOre, "Copper Ore" : copperOre, "Green Circuit" : greenCircuit, "Copper Wire" : copperWire}
 
 
 def calculateItemsNeeded():
