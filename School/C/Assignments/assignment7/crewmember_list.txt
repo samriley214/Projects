@@ -1,0 +1,22 @@
+Captain:  None
+                       Skills           Abilities
+Ser#   Post Rank | N  E  T  L  D  | C  I  S  P  A  | Race Name
+524286 Crew Lt | 01 00 00 01 01 | 15 15 08 18 11 | M    Crewman7
+
+272353 Crew Ens | 00 00 00 01 00 | 18 13 14 12 11 | V    Crewman8
+
+789383 Crew Spcr | 00 00 00 00 00 | 13 07 10 08 11 | V    Crewman1
+
+355736 Crew Spcr | 00 00 00 00 00 | 10 11 05 09 11 | S    Crewman2
+
+975011 Crew Spcr | 00 00 00 00 00 | 13 10 13 13 07 | V    Crewman3
+
+799170 Crew Spcr | 00 00 00 00 00 | 10 10 15 09 09 | T    Crewman4
+
+415434 Crew Spcr | 00 -01 -01 00 00 | 09 05 08 11 05 | T    Crewman5
+
+710012 Crew Spcr | 00 00 00 00 00 | 09 11 16 14 08 | V    Crewman6
+
+147796 Crew Spcr | 00 00 00 00 00 | 07 14 13 09 10 | S    Crewman9
+
+624914 Crew Spcr | 00 00 00 00 00 | 10 14 15 18 09 | S    Crewman10
